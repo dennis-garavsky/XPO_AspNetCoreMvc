@@ -1,4 +1,5 @@
-﻿using DevExpress.Xpo;
+﻿using System;
+using DevExpress.Xpo;
 
 namespace DevExtremeAspNetCoreApp1.Models {
 
@@ -14,7 +15,7 @@ namespace DevExtremeAspNetCoreApp1.Models {
         }
         [PersistentAlias("Concat([FirstName], ' ', [LastName])")]
         public string ContactName {
-            get { return string.Concat(FirstName, " ", LastName); }
+            get { return Convert.ToString(EvaluateAlias(nameof(ContactName))); }
         }
         [Association("CustomerOrders")]
         public XPCollection<Order> Orders {

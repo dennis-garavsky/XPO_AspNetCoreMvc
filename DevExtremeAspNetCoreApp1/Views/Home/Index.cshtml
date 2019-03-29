@@ -1,6 +1,6 @@
 @using DevExtremeAspNetCoreApp1.Models
 
-<h2>Customer List</h2>
+<h2>Customers</h2>
 
 <script type="text/javascript">
     var selectedCustomerId;
@@ -23,15 +23,15 @@
         .DeleteAction("Delete")
         .Key("Oid"))
     .Columns(columns => {
+        columns.Add().Type(GridCommandColumnType.Buttons).Buttons(b => {
+            b.Add().Name(GridColumnButtonName.Edit);
+            b.Add().Name(GridColumnButtonName.Delete);
+        });
         columns.AddFor(m => m.Oid).Width(100).AllowEditing(false).SortOrder(SortOrder.Desc);
         columns.AddFor(m => m.FirstName).Caption("First Name").ValidationRules(r => r.AddRequired());
         columns.AddFor(m => m.LastName).Caption("Last Name").ValidationRules(r => r.AddRequired());
         columns.Add().Type(GridCommandColumnType.Buttons).Buttons(b => {
-            b.Add().Text("Edit Orders").OnClick(@<text>function(e) { showOrders(e.row.data.Oid); }</text>);
-        });
-        columns.Add().Type(GridCommandColumnType.Buttons).Buttons(b => {
-            b.Add().Name(GridColumnButtonName.Edit);
-            b.Add().Name(GridColumnButtonName.Delete);
+            b.Add().Text("Orders").OnClick(@<text>function(e) { showOrders(e.row.data.Oid); }</text>);
         });
     })
     .Editing(editing => {
@@ -62,7 +62,7 @@
     .ID("orders-popup")
     .ElementAttr("class", "popup")
     .ShowTitle(true)
-    .Title("Orders List")
+    .Title("Orders")
     .Visible(false)
     .DragEnabled(false)
     .CloseOnOutsideClick(false)
@@ -78,6 +78,10 @@
                     .DeleteAction("Delete")
                     .Key("Oid"))
                 .Columns(columns => {
+                    columns.Add().Type(GridCommandColumnType.Buttons).Buttons(b => {
+                        b.Add().Name(GridColumnButtonName.Edit);
+                        b.Add().Name(GridColumnButtonName.Delete);
+                    });
                     columns.AddFor(m => m.Oid).Width(100).AllowEditing(false);
                     columns.AddFor(m => m.OrderDate).Caption("Order Date");
                     columns.AddFor(m => m.ProductName).Caption("Product Name").ValidationRules(r => r.AddRequired());
@@ -85,12 +89,12 @@
                     columns.Add()
                         .DataField("Customer.Oid").CalculateDisplayValue("Customer.ContactName")
                         .Caption("Customer")
-                        .ValidationRules(r=>r.AddRequired())
-                        .Lookup(l=> {
+                        .ValidationRules(r => r.AddRequired())
+                        .Lookup(l => {
                             l.DisplayExpr("ContactName");
                             l.ValueExpr("Oid");
                             l.DataSource(d => d.Mvc().Controller("Customer").Key("Oid").LoadAction("Get"));
-                    });
+                        });
                 })
                 .Editing(editing => {
                     editing.Mode(GridEditMode.Popup);
